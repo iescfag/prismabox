@@ -4,6 +4,7 @@ import { generateTypeboxOptions } from "../annotations/options";
 import { getConfig } from "../config";
 import type { ProcessedModel } from "../model";
 import { makeUnion } from "./wrappers/union";
+import { makeStringEnum } from "./stringEnum";
 
 export const processedEnums: ProcessedModel[] = [];
 
@@ -25,6 +26,10 @@ export function processEnums(
 export function stringifyEnum(data: DMMF.DatamodelEnum) {
   const annotations = extractAnnotations(data.documentation);
   if (annotations.isHidden) return undefined;
+
+  if (annotations.isStringEnum) {
+    return makeStringEnum(data.values.map(v => v.name))
+  }
 
   const variantsString = data.values.map(
     (v) => `${getConfig().typeboxImportVariableName}.Literal('${v.name}')`,

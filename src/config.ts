@@ -84,6 +84,10 @@ const configSchema = Type.Object(
      * The prefix to add to exported types
      */
     exportedTypePrefix: Type.String({ default: "" }),
+    /**
+     * How the StringEnum type should be called
+     */
+    stringEnumName: Type.String({ default: "__StringEnum__" })
   },
   { additionalProperties: false },
 );

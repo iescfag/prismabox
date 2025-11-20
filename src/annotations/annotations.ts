@@ -6,7 +6,8 @@ export type Annotation =
   | { type: "HIDDEN_INPUT_CREATE" }
   | { type: "HIDDEN_INPUT_UPDATE" }
   | { type: "OPTIONS"; value: string }
-  | { type: "TYPE_OVERWRITE"; value: string };
+  | { type: "TYPE_OVERWRITE"; value: string }
+  | { type: "STRING_ENUM" };
 
 export function isHiddenVariant(
   annotation: Annotation,
@@ -74,6 +75,10 @@ const annotationKeys: { type: Annotation["type"]; keys: string[] }[] = [
     type: "TYPE_OVERWRITE",
     keys: ["@prismabox.typeOverwrite"],
   },
+  {
+    type: "STRING_ENUM",
+    keys: ["@prismabox.StringEnum"]
+  }
 ];
 
 export function extractAnnotations(
@@ -85,6 +90,7 @@ export function extractAnnotations(
   isHiddenInput: boolean;
   isHiddenInputCreate: boolean;
   isHiddenInputUpdate: boolean;
+  isStringEnum: boolean;
 } {
   const annotations: Annotation[] = [];
   let description = "";
@@ -144,6 +150,7 @@ export function extractAnnotations(
     isHiddenInput: isHiddenInput(annotations),
     isHiddenInputCreate: isHiddenInputCreate(annotations),
     isHiddenInputUpdate: isHiddenInputUpdate(annotations),
+    isStringEnum: isStringEnum(annotations)
   };
 }
 
@@ -161,4 +168,8 @@ export function isHiddenInputCreate(annotations: Annotation[]): boolean {
 
 export function isHiddenInputUpdate(annotations: Annotation[]): boolean {
   return annotations.some((a) => a.type === "HIDDEN_INPUT_UPDATE");
+}
+
+export function isStringEnum(annotations: Annotation[]): boolean {
+  return annotations.some((a) => a.type === "STRING_ENUM")
 }

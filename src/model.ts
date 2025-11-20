@@ -11,6 +11,7 @@ import {
   processedRelationsInputUpdate,
 } from "./generators/relations";
 import { processedSelect } from "./generators/select";
+import { stringEnumImport, stringEnumType } from "./generators/stringEnum";
 import {
   transformDateImportStatement,
   transformDateType,
@@ -132,12 +133,13 @@ export function mapAllModelsForWrite() {
   for (const [key, value] of modelsPerName) {
     modelsPerName.set(
       key,
-      `${typepoxImportStatement()}\n${transformDateImportStatement()}\n${nullableImport()}\n${value}`,
+      `${typepoxImportStatement()}\n${transformDateImportStatement()}\n${nullableImport()}\n${stringEnumImport()}\n${value}`,
     );
   }
 
   modelsPerName.set(getConfig().nullableName, nullableType());
   modelsPerName.set(getConfig().transformDateName, transformDateType());
+  modelsPerName.set(getConfig().stringEnumName, stringEnumType());
 
   return modelsPerName;
 }
